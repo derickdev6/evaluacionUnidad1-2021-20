@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "student.h"
+
+void reverse(char *, int, int);
 
 int main(int argc, char *argv[])
 {
@@ -38,17 +41,44 @@ int main(int argc, char *argv[])
         }
     }
 
-    // Feature 1 Read first inputFile line and write into outputFile
-    char buffer[64];
+    // Basic for reading lines
+    char buffer[70];
     char *status = NULL;
+
+    // Feature 1 Read first inputFile line and write into outputFile
     status = fgets(buffer, sizeof(buffer), inFile);
     if (status != NULL)
     {
-        printf("%s\n", buffer);
+        printf("%s", buffer);
+        fputs(buffer, outFile);
+    }
+    // fclose(inFile);
+    // fclose(outFile);
+
+    // Feature 2 Read second line, reverse it and put it in O file
+    // status = fgets(buffer, sizeof(buffer), inFile);
+    status = fgets(buffer, sizeof(buffer), inFile);
+    if (status != NULL)
+    {
+        reverse(buffer, 0, strlen(buffer) - 1);
+        printf("%s", buffer);
         fputs(buffer, outFile);
     }
     fclose(inFile);
     fclose(outFile);
 
     return EXIT_SUCCESS;
+}
+void reverse(char *x, int begin, int end)
+{
+    char c;
+
+    if (begin >= end)
+        return;
+
+    c = *(x + begin);
+    *(x + begin) = *(x + end);
+    *(x + end) = c;
+
+    reverse(x, ++begin, --end);
 }
