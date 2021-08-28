@@ -38,5 +38,17 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Feature 1 Read first inputFile line and write into outputFile
+    char buffer[64];
+    char *status = NULL;
+    status = fgets(buffer, sizeof(buffer), inFile);
+    if (status != NULL)
+    {
+        printf("%s\n", buffer);
+        fputs(buffer, outFile);
+    }
+    fclose(inFile);
+    fclose(outFile);
+
     return EXIT_SUCCESS;
 }
