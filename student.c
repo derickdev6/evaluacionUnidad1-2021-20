@@ -9,6 +9,8 @@ void reverse(char *, int, int);
 void feature1(FILE *fin, FILE *fout);
 void feature2(FILE *fin, FILE *fout);
 void feature3(FILE *fin, FILE *fout);
+void feature4(FILE *inFile, int **parr, int *length, char **op);
+void feature5(FILE *fout, int *parr, int length, char *op);
 
 // Array functions
 char *create_array(int);
@@ -158,11 +160,56 @@ void feature4(FILE *inFile, int **parr, int *length, char **op)
 
     //  IMPORTANTE!!!!
 
-    // *length = cont; //this works
-    // *op = temp;     //this doesn't
-    // *parr = temp2;  //this doesn't
+    *length = cont; //this works
+    *op = temp;     //this doesn't
+    *parr = temp2;  //this doesn't
 
     destroy_array(buffer);
+}
+
+void feature5(FILE *fout, int *parr, int length, char *op)
+{
+    // Feature 5 recibe direccion del arreglo y operaciion leida en feature 4
+    // Realiza la operacion y guarde el resultado en linea 4 de fout
+
+    unsigned int sumop = 0;
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        sumop += op[i];
+    }
+    if (sumop == 318)
+    { //AVG
+        int suma = 0;
+        for (uint8_t i = 0; i < length; i++)
+        {
+            suma += parr[i];
+        }
+        int avg = suma / length;
+        fprintf(fout, "\n");
+        fprintf(fout, "%d", avg);
+    }
+    if (sumop == 326)
+    { //MAX
+        int max = 0;
+        for (uint8_t i = 0; i < length; i++)
+        {
+            if (parr[i] > max)
+                max = parr[i];
+        }
+        fprintf(fout, "\n");
+        fprintf(fout, "%d", max);
+    }
+    if (sumop == 324)
+    { //MIN
+        int min = 99999;
+        for (uint8_t i = 0; i < length; i++)
+        {
+            if (parr[i] < min)
+                min = parr[i];
+        }
+        fprintf(fout, "\n");
+        fprintf(fout, "%d", min);
+    }
 }
 
 void reverse(char *x, int begin, int end)

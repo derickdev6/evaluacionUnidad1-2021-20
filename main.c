@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
     feature1(fin, fout);
     feature2(fin, fout);
     feature3(fin, fout);
-
     int *parr = NULL;
     int len = 0;
     char *op = NULL;
     feature4(fin, &parr, &len, &op);
+    feature5(fout, parr, len, op);
 
     fclose(fin);
     fclose(fout);
