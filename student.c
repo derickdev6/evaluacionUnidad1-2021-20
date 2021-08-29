@@ -10,6 +10,12 @@ void feature1(FILE *fin, FILE *fout);
 void feature2(FILE *fin, FILE *fout);
 void feature3(FILE *fin, FILE *fout);
 
+// Array functions
+char *create_array(int);
+int *create_intarray(int size);
+void destroy_array(char *);
+void destroy_intarray(int *this);
+
 void feature1(FILE *fin, FILE *fout)
 {
     // Feature 1 Read first inputFile line and write into outputFile
@@ -72,6 +78,93 @@ void feature3(FILE *fin, FILE *fout)
     }
 }
 
+void feature4(FILE *inFile, int **parr, int *length, char **op)
+{
+    //feature4: Lee er arreglo de entros de la linea 4
+    // y la operacion separada por un espacio
+    int size_buffer = 256;
+    char *buffer = create_array(size_buffer); // contendra la linea 4
+    uint8_t data = 0;
+    uint8_t lfcount = 0;
+    uint8_t i = 0;
+    while ((data = fgetc(inFile)) != EOF)
+    {
+        if (data == 10)
+            lfcount++;
+        if (lfcount >= 1)
+            break;
+        buffer[i] = data; //lleno el buffer con la linea 4
+        i++;
+    }
+    // Encontrando la Operacion
+    uint8_t size_opp = 8;
+    char *opp = create_array(size_opp);
+    for (uint8_t j = 0; j < size_opp; j++)
+        opp[j] = 0;
+    char aux;
+    uint8_t k = 0;
+    for (uint8_t j = i; j > 0; j--)
+    {
+        if (buffer[j] == 32)
+            break;
+        if (buffer[j] > 31 && buffer[j] < 255 && buffer[j] != 127)
+        {
+            aux = buffer[j];
+            opp[k] = aux;
+            buffer[j] = 0;
+            k++;
+        }
+    }
+    char *temp = create_array(k); //contendra op
+    for (uint8_t j = 0; j < k; j++)
+        temp[j] = 0;
+    uint8_t inv = k - 1;
+    for (uint8_t j = 0; j < k; j++)
+    {
+        temp[inv] = opp[j]; //OP
+        inv--;
+    }
+    //Encontrando parr y len
+    int *arr = create_intarray(size_buffer);
+    char *token;
+    token = strtok(buffer, " ");
+    if (token == NULL)
+        EXIT_FAILURE;
+    arr[0] = atoi(token);
+    uint8_t n = 0;
+    while (token != NULL)
+    {
+        if (token != NULL)
+        {
+            arr[n] = atoi(token);
+        }
+        else
+            break;
+        token = strtok(NULL, " ");
+        n++;
+    }
+    uint8_t cont = 0;
+    for (uint8_t j = 0; j < size_buffer - 1; j++)
+    { //obteniendo len
+        if (arr[j] == 0)
+            break;
+        cont++;
+    }
+    int *temp2 = create_intarray(cont); //parr
+    for (uint8_t j = 0; j < cont; j++)
+    {
+        temp2[j] = (int)arr[j];
+    }
+
+    //  IMPORTANTE!!!!
+
+    // *length = cont; //this works
+    // *op = temp;     //this doesn't
+    // *parr = temp2;  //this doesn't
+
+    destroy_array(buffer);
+}
+
 void reverse(char *x, int begin, int end)
 {
     char c;
@@ -84,4 +177,22 @@ void reverse(char *x, int begin, int end)
     *(x + end) = c;
 
     reverse(x, ++begin, --end);
+}
+
+// Array functions
+char *create_array(int size)
+{
+    return (char *)malloc(sizeof(int) * size);
+}
+int *create_intarray(int size)
+{
+    return (int *)malloc(sizeof(int) * size);
+}
+void destroy_array(char *this)
+{
+    free(this);
+}
+void destroy_intarray(int *this)
+{
+    free(this);
 }
