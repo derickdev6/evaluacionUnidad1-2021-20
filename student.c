@@ -12,6 +12,7 @@ void feature3(FILE *fin, FILE *fout);
 void feature4(FILE *inFile, int **parr, int *length, char **op);
 void feature5(FILE *fout, int *parr, int length, char *op);
 void feature6(FILE *fin, struct Obj_t *pobj);
+void feature7(FILE *fout, struct Obj_t *pobj);
 
 // Array functions
 char *create_array(int);
@@ -257,6 +258,17 @@ void feature6(FILE *fin, struct Obj_t *pobj)
     printf("Nombre\t%s\n", pobj->nombre);
     printf("Cedula\t%d\n", pobj->cedula);
 }
+
+void feature7(FILE *fout, struct Obj_t *pobj)
+{
+    // Feature 7 recibe puntero de la estructura del feature 6 y
+    // la guarda en orden en el fout
+    fputs("\n", fout);
+    fprintf(fout, "%d", pobj->cedula);
+    fputs(" ,", fout);
+    fprintf(fout, "%s", pobj->nombre);
+}
+
 // Array functions
 char *create_array(int size)
 {
