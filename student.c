@@ -11,6 +11,7 @@ void feature2(FILE *fin, FILE *fout);
 void feature3(FILE *fin, FILE *fout);
 void feature4(FILE *inFile, int **parr, int *length, char **op);
 void feature5(FILE *fout, int *parr, int length, char *op);
+void feature6(FILE *fin, struct Obj_t *pobj);
 
 // Array functions
 char *create_array(int);
@@ -158,11 +159,9 @@ void feature4(FILE *inFile, int **parr, int *length, char **op)
         temp2[j] = (int)arr[j];
     }
 
-    //  IMPORTANTE!!!!
-
-    *length = cont; //this works
-    *op = temp;     //this doesn't
-    *parr = temp2;  //this doesn't
+    *length = cont;
+    *op = temp;
+    *parr = temp2;
 
     destroy_array(buffer);
 }
@@ -226,6 +225,38 @@ void reverse(char *x, int begin, int end)
     reverse(x, ++begin, --end);
 }
 
+void feature6(FILE *fin, struct Obj_t *pobj)
+{
+    // Feature 6 lee la quinta linea de fin, genera un objeto a partir
+    // de la estructura de datos pasda por pobj
+
+    uint8_t size = 160;
+    char *buffer = create_array(size);
+    uint8_t data = 0;
+    uint8_t lfcount = 0;
+    uint8_t i = 0;
+    while ((data = fgetc(fin)) != EOF)
+    {
+        if (data == 10)
+            lfcount++;
+        if (lfcount >= 1)
+            break;
+        buffer[i] = data;
+        i++;
+    }
+    char *token;
+    token = strtok(buffer, ","); // Caracter por el cual dividiremos datos
+    if (token == NULL)
+        EXIT_FAILURE;
+    char *nombre = token;
+    char *token2 = strtok(NULL, "");
+    int cedula = atoi(token2); // Convertimos cedula en int
+
+    pobj->nombre = nombre;
+    pobj->cedula = cedula;
+    printf("Nombre\t%s\n", pobj->nombre);
+    printf("Cedula\t%d\n", pobj->cedula);
+}
 // Array functions
 char *create_array(int size)
 {

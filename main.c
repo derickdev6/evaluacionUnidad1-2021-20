@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
     char *op = NULL;
     feature4(fin, &parr, &len, &op);
     feature5(fout, parr, len, op);
+    struct Obj_t pobj;
+    feature6(fin, &pobj);
+    feature7(fout, &pobj);
 
     fclose(fin);
     fclose(fout);
