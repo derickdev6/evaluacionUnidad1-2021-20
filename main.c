@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "student.h"
@@ -36,6 +37,9 @@ int main(int argc, char *argv[])
     struct Obj_t pobj;
     feature6(fin, &pobj);
     feature7(fout, &pobj);
+    // struct _courseInfo_t *pobjCourse;
+    // int length;
+    // feature8(fin, &pobjCourse, &length);
 
     fclose(fin);
     fclose(fout);

@@ -13,6 +13,7 @@ void feature4(FILE *inFile, int **parr, int *length, char **op);
 void feature5(FILE *fout, int *parr, int length, char *op);
 void feature6(FILE *fin, struct Obj_t *pobj);
 void feature7(FILE *fout, struct Obj_t *pobj);
+void feature8(FILE *fin, struct _courseInfo_t **pobj, int *length);
 
 // Array functions
 char *create_array(int);
@@ -70,10 +71,10 @@ void feature3(FILE *fin, FILE *fout)
         {
             int x = atoi(pch);
             sum += x;
-            printf("%s \t->\t %d\n", pch, x);
+            // printf("%s \t->\t %d\n", pch, x);
             pch = strtok(NULL, " ");
         }
-        printf("Total = %d\n", sum);
+        // printf("Total = %d\n", sum);
         // char strsum[10];
         // snprintf(strsum, sizeof(strsum), "%s");
 
@@ -255,8 +256,8 @@ void feature6(FILE *fin, struct Obj_t *pobj)
 
     pobj->nombre = nombre;
     pobj->cedula = cedula;
-    printf("Nombre\t%s\n", pobj->nombre);
-    printf("Cedula\t%d\n", pobj->cedula);
+    // printf("Nombre\t%s\n", pobj->nombre);
+    // printf("Cedula\t%d\n", pobj->cedula);
 }
 
 void feature7(FILE *fout, struct Obj_t *pobj)
@@ -267,6 +268,77 @@ void feature7(FILE *fout, struct Obj_t *pobj)
     fprintf(fout, "%d", pobj->cedula);
     fputs(" ,", fout);
     fprintf(fout, "%s", pobj->nombre);
+}
+
+void feature8(FILE *fin, struct _courseInfo_t **pobj, int *length)
+{
+    // Feature 8 lee la sexta linea de fin, un entero que indica la cantidad de cursos
+    // Pregunta la info de cada curso
+
+    int size_buffer = 16;
+    int numCursos;
+    char *buffer = create_array(size_buffer);
+    fgets(buffer, size_buffer, fin);
+    for (int i = 0; i < size_buffer; i++)
+    {
+        buffer[i] -= 48;
+        if (buffer[i] > 0 && buffer[i] < 10)
+        {
+            numCursos = buffer[i];
+        }
+        else
+        {
+            break;
+        }
+    }
+    *length = numCursos;
+    printf("Cursos\t%d\n", numCursos);
+
+    char *token;
+    struct _courseInfo_t arrObj[numCursos]; //Arreglo de N cursos
+    for (uint8_t i = 0; i < numCursos; i++)
+    {
+        struct _courseInfo_t newCourse; //Estructura temporal para nuevo curso
+        char line[32];
+
+        printf("Curso #%d: nombre, creditos, nota\n", i + 1);
+        scanf("%s", line);
+        if (line == NULL)
+        {
+            perror("line is empty");
+            EXIT_FAILURE;
+        }
+        // printf("%s\n", line);
+        char token[] = ",";
+        char *name = strtok(line, token);
+        char *strcred = strtok(NULL, token);
+        char *strnota = strtok(NULL, token);
+
+        // char name[32];
+        // strcpy(name, pname);
+        int cred = atoi(strcred);
+        float nota = atof(strnota);
+
+        printf("%s\n", name);
+        printf("%d\n", cred);
+        printf("%f\n", nota);
+
+        newCourse.name = name;
+        newCourse.credits = cred;
+        newCourse.grade = nota;
+
+        // printf("Curso.name = %s\nCurso.credits = %d\nCurso.grade = %f\n", newCourse.name, newCourse.credits, newCourse.grade);
+
+        arrObj[i] = newCourse;
+        // name = NULL;
+    }
+
+    for (uint8_t i = 0; i < numCursos; i++)
+    {
+        printf("Curso #%d\n\tCurso.name = %s\n\tCurso.credits = %d\n\tCurso.grade = %f\n", i + 1, arrObj[i].name, arrObj[i].credits, arrObj[i].grade);
+    }
+
+    *pobj = arrObj;
 }
 
 // Array functions
